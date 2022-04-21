@@ -3,7 +3,7 @@
 var canvas = document.body.appendChild(document.createElement("canvas"));
 var ctx = canvas.getContext("2d");
 
-canvasColor = 'rgb(30, 30, 30)'
+canvasColor = 'rgba(30, 30, 30, 0)'
 document.body.style.backgroundColor = canvasColor;
 canvas.style.position = "relative";
 canvas.style.background = canvasColor
