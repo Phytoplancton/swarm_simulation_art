@@ -10,8 +10,8 @@ canvas.style.background = canvasColor
 canvas.style.border = `1px solid `;
 canvas.style.zIndex = -1;
 document.body.style.margin = '10 px'
-canvasWidth = window.innerWidth - 10
-canvasHeight = window.innerHeight - 10
+canvasWidth = window.innerWidth - 20
+canvasHeight = window.innerHeight - 30
 
 function resize(){
     canvas.width = canvasWidth
@@ -24,12 +24,6 @@ function mod(n, m) {
     return ((n % m) + m) % m;
 }
 
-var isRepulsion = false;
-var isAlignment = false;
-var isAttraction = false;
-const setRepulsion = ()=>{isRepulsion = !isRepulsion;}
-const setAlignment = ()=>{isAlignment = !isAlignment;}
-const setAttraction = ()=>{isAttraction = !isAttraction;}
 
 var mousePosX = 0
 var mousePosY = 0
@@ -42,6 +36,17 @@ window.addEventListener('mousemove', function(e){
     setTimeout(()=>{
         isChaseMouse = false;
     }, 2000)
+})
+window.addEventListener('touchmove', function(e){
+    var touch = e.touches[0] || e.changedTouches[0];
+    x = touch.pageX;
+    y = touch.pageY;
+    mousePosX = parseInt(touch.pageX);
+    mousePosY = parseInt(touch.pageY);
+    isChaseMouse = true;
+})
+window.addEventListener('touchend', ()=>{
+    isChaseMouse = false;
 })
 
 var scale = 1
@@ -63,10 +68,8 @@ var one = true
 
 
 // bird character
-function Bird(startAngle, x, y, birdColor, birdLenth){
-    this.birdColor = birdColor
-    this.birdLenth = birdLenth * scale
-    this.birdWidth = this.birdLenth/3
+function Bird(startAngle, x, y){
+    this.randomVal = Math.random()
     this.distanceToOtherBird
     this.angleToOther
     this.coords = [x,y]
@@ -100,16 +103,13 @@ function Bird(startAngle, x, y, birdColor, birdLenth){
 
             //alignment
             if (this.distanceToOtherBird > alignmentZone){continue birdloop}
-            if (isAlignment){
                 this.viewAngleDiff = this.movementDirection - birds[j].movementDirection
                 if (Math.abs(this.viewAngleDiff)>Math.PI){
                     this.viewAngleDiff -= Math.sign(this.viewAngleDiff)*Math.PI
                 }
                 this.movementDirection -= this.viewAngleDiff/this.distanceToOtherBird*alignmentSpeed    
-            }
 
             //repulsion
-            if (isRepulsion){
                 if (this.distanceToOtherBird > repulsionZone){continue birdloop}
                 if (this.angeleDiff>0 ){
                     this.movementDirection -= repulsionSpeed/this.distanceToOtherBird**repulsionPot
@@ -117,11 +117,9 @@ function Bird(startAngle, x, y, birdColor, birdLenth){
                 else {
                     this.movementDirection += repulsionSpeed/this.distanceToOtherBird**repulsionPot
                 } 
-            }
 
         }
         // attraction
-        if (isAttraction){
             this.angleToOther = mod(Math.atan2(this.sumDeltaY, this.sumDeltaY),Math.PI*2)
             this.angeleDiff = mod(this.movementDirection - this.angleToOther,Math.PI*2) - Math.PI
             if (this.angeleDiff>0 ){
@@ -130,7 +128,6 @@ function Bird(startAngle, x, y, birdColor, birdLenth){
             else {
                 this.movementDirection -= attracionSpeed
             }
-        }
 
 
         //avoid the mouse
@@ -169,7 +166,7 @@ function Bird(startAngle, x, y, birdColor, birdLenth){
         ctx.translate(this.coords[0],this.coords[1])
         ctx.rotate(this.movementDirection)
         ctx.fillStyle = this.birdColor
-        ctx.fillRect( -this.birdLenth/2, -this.birdWidth/2,this.birdLenth,this.birdWidth);
+        ctx.fillRect( -this.birdLength/2, -this.birdWidth/2,this.birdLength,this.birdWidth);
         ctx.restore()
     }
 }
@@ -181,18 +178,16 @@ for (var i = 0; i < howManyBirds; i++ ){
     birds.push(new Bird(
         Math.random()*2*Math.PI, 
         Math.random()*window.innerWidth*0.9+window.innerWidth*0.05, 
-        Math.random()*window.innerHeight*0.9+window.innerHeight*0.05,
-        `rgb(0,${180 + Math.random()*50},255)`,
-        1+Math.random()*20
+        Math.random()*window.innerHeight*0.9+window.innerHeight*0.05
         ))
 }
 
 // animate function
-
+let clearCanvasFillstyle;
 function animate(){
     // ctx.clearRect(0,0,window.innerWidth, window.innerHeight)
 
-    ctx.fillStyle = 'rgba(5,5,5,0.2)'
+    ctx.fillStyle = clearCanvasFillstyle
     ctx.fillRect(0,0,window.innerWidth, window.innerHeight)
 
     for (var i = 0; i<birds.length; i++){
