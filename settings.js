@@ -18,9 +18,9 @@ const Settings = (()=>{
         const SS = {}
 
         SS.standardColor ='rgb(230,230,230)'
-        SS.colorHue = S.create1SliderSettings(40,360,205,1,'color hue: ',SS.standardColor)
-        SS.boidWidth= S.create1SliderSettings(1,10,5,1,'boid width: ',SS.standardColor)
-        SS.boidTrail = S.create1SliderSettings(1,50,5,1,'boid trail lenth: ',SS.standardColor)        
+        SS.colorHue = S.create1SliderSettings(40,360,205,1,'Farbe: ',SS.standardColor)
+        SS.boidWidth= S.create1SliderSettings(1,10,5,1,'Dicke: ',SS.standardColor)
+        SS.boidTrail = S.create1SliderSettings(1,100,5,1,'Spurlänge: ',SS.standardColor)        
 
         return SS
     })()
