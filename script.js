@@ -11,7 +11,7 @@ canvas.style.border = `1px solid `;
 canvas.style.zIndex = -1;
 document.body.style.margin = '10 px'
 canvasWidth = window.innerWidth - 20
-canvasHeight = window.innerHeight - 45
+canvasHeight = window.innerHeight - 22
 
 function resize(){
     canvas.width = canvasWidth
